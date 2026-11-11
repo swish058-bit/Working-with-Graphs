@@ -1,13 +1,50 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-void main() {
-    //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-    // to see how IntelliJ IDEA suggests fixing it.
-    IO.println(String.format("Hello and welcome!"));
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
-    for (int i = 1; i <= 5; i++) {
-        //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-        // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-        IO.println("i = " + i);
+public class Main {
+
+    public static void main(String[] args) {
+
+        Scanner keyboard = new Scanner(System.in);
+
+        System.out.print("Enter graph file name: ");
+        String fileName = keyboard.nextLine();
+
+        GraphAdjList listGraph = new GraphAdjList();
+        GraphAdjMatrix matrixGraph = new GraphAdjMatrix();
+
+        try {
+            Scanner fileScanner = new Scanner(new File(fileName));
+
+            String startNode = null;
+
+            while (fileScanner.hasNext()) {
+
+                String from = fileScanner.next();
+                String to = fileScanner.next();
+                double weight = fileScanner.nextDouble();
+
+                if (startNode == null) {
+                    startNode = from;
+                }
+
+                listGraph.addEdge(from, to);
+                matrixGraph.addEdge(from, to);
+            }
+
+            fileScanner.close();
+
+            System.out.println();
+            listGraph.bfs(startNode);
+
+            System.out.println();
+            matrixGraph.bfs(startNode);
+
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found.");
+        }
+
+        keyboard.close();
     }
 }
